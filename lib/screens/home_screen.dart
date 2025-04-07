@@ -249,16 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Gegg'),
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add, color: Color(0xFFFFC300)),
-            onPressed: _addNewBudget,
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Gegg'), backgroundColor: Colors.black),
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
@@ -424,12 +415,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
           SizedBox(height: 24),
           ElevatedButton(
-            onPressed:
-                () => Navigator.pushNamed(
-                  context,
-                  '/edit-budget',
-                ).then((_) => _loadBudget()),
-            child: Text('Edit Budget'),
+            onPressed: _addNewBudget,
+            child: Text('Add New Budget'),
           ),
         ],
       ),
@@ -463,15 +450,115 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSettingsTab() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.remove('username');
-          await prefs.remove('password');
-          Navigator.pushReplacementNamed(context, '/login');
-        },
-        child: const Text('Logout'),
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Notifications Section
+          Card(
+            color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  // Budget Limit Alert
+                  ListTile(
+                    leading: Icon(
+                      Icons.notifications,
+                      color: Color(0xFFFFC300),
+                    ),
+                    title: Text(
+                      'Budget Limit Alerts',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      'Get notified when approaching budget limits',
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                    trailing: Switch(
+                      value: true,
+                      onChanged: (value) {},
+                      activeColor: Color(0xFFFFC300),
+                    ),
+                  ),
+                  // Set Alert Threshold
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Alert Threshold',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Percentage',
+                                  hintStyle: TextStyle(color: Colors.white54),
+                                  suffixText: '%',
+                                  suffixStyle: TextStyle(color: Colors.white70),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFFFC300),
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFFFC300),
+                                    ),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFFFC300),
+                              ),
+                              child: Text(
+                                'Set',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 24),
+          // Logout Button
+          ElevatedButton(
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('username');
+              await prefs.remove('password');
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            child: const Text('Logout'),
+          ),
+        ],
       ),
     );
   }
